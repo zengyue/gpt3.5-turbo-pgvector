@@ -60,7 +60,7 @@ const handler = async (req: Request): Promise<Response> => {
 
   const embeddingData = await embeddingResponse.json();
   const [{ embedding }] = embeddingData.data;
-  console.log("embedding: ", embedding);
+  // console.log("embedding: ", embedding);
 
   const { data: documents, error } = await supabaseClient.rpc(
     "match_documents",
@@ -107,25 +107,46 @@ const handler = async (req: Request): Promise<Response> => {
   from the CONTEXT, but never list a URL more than once (ignore trailing forward slashes when comparing for uniqueness). Never include URLs that are not in the CONTEXT sections. Never make up URLs`;
 
   const userContent = `CONTEXT:
-  Next.js is a React framework for creating production-ready web applications. It provides a variety of methods for fetching data, a built-in router, and a Next.js Compiler for transforming and minifying JavaScript code. It also includes a built-in Image Component and Automatic Image Optimization for resizing, optimizing, and serving images in modern formats.
-  SOURCE: nextjs.org/docs/faq
+  F2，一个专注于移动，开箱即用的可视化解决方案，完美支持 H5 环境同时兼容多种环境（node, 小程序，weex）。完备的图形语法理论，满足你的各种可视化需求。专业的移动设计指引为你带来最佳的移动端图表体验
   
   QUESTION: 
-  what is nextjs?    
+  F2 是什么?    
   `;
 
-  const assistantContent = `Next.js is a framework for building production-ready web applications using React. It offers various data fetching options, comes equipped with an integrated router, and features a Next.js compiler for transforming and minifying JavaScript. Additionally, it has an inbuilt Image Component and Automatic Image Optimization that helps resize, optimize, and deliver images in modern formats.
-  
-  \`\`\`js
-  function HomePage() {
-    return <div>Welcome to Next.js!</div>
-  }
-  
-  export default HomePage
-  \`\`\`
-  
-  SOURCES:
-  https://nextjs.org/docs/faq`;
+  const assistantContent = `
+  如下是一个使用 F2 快速生成柱图图的示例，你也可以在[官网](https://f2.antv.antgroup.com/examples)查看更多的示例。
+  \`\`\`html
+<canvas id="mountNode"></canvas>
+\`\`\`
+
+\`\`\`jsx
+import { Canvas, Chart, Axis, Interval, Tooltip } from '@antv/f2';
+// F2 对数据源格式的要求，仅仅是 JSON 数组，数组的每个元素是一个标准 JSON 对象。
+const data = [
+  { genre: 'Sports', sold: 275 },
+  { genre: 'Strategy', sold: 115 },
+  { genre: 'Action', sold: 120 },
+  { genre: 'Shooter', sold: 350 },
+  { genre: 'Other', sold: 150 },
+];
+
+// 获取 canvas context
+const context = document.getElementById('mountNode').getContext('2d');
+const { props } = (
+  <Canvas context={context} pixelRatio={window.devicePixelRatio}>
+    <Chart data={data}>
+      <Axis field="genre" />
+      <Axis field="sold" />
+      <Interval x="genre" y="sold" color="genre" />
+      <Tooltip />
+    </Chart>
+  </Canvas>
+);
+
+const canvas = new Canvas(props);
+canvas.render();
+\`\`\`
+  `;
 
   const userMessage = `CONTEXT:
   ${contextText}
