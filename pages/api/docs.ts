@@ -60,7 +60,7 @@ const handler = async (req: Request): Promise<Response> => {
 
   const embeddingData = await embeddingResponse.json();
   const [{ embedding }] = embeddingData.data;
-  // console.log("embedding: ", embedding);
+  console.log("embedding: ", embedding);
 
   const { data: documents, error } = await supabaseClient.rpc(
     "match_documents",
@@ -152,7 +152,6 @@ const handler = async (req: Request): Promise<Response> => {
       content: userMessage
     }
   ];
-
 
   console.log("messages: ", messages);
 
