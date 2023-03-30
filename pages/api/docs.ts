@@ -66,7 +66,7 @@ const handler = async (req: Request): Promise<Response> => {
     "match_documents",
     {
       query_embedding: embedding,
-      similarity_threshold: 0.01, // Choose an appropriate threshold for your data
+      similarity_threshold: 0.001, // Choose an appropriate threshold for your data
       match_count: 10 // Choose the number of matches
     }
   );
