@@ -66,7 +66,7 @@ const handler = async (req: Request): Promise<Response> => {
     "match_documents",
     {
       query_embedding: embedding,
-      similarity_threshold: 0.1, // Choose an appropriate threshold for your data
+      similarity_threshold: 0.001, // Choose an appropriate threshold for your data
       match_count: 10 // Choose the number of matches
     }
   );
@@ -85,19 +85,19 @@ const handler = async (req: Request): Promise<Response> => {
       const document = documents[i];
       const content = document.content;
       const url = document.url;
-      const encoded = tokenizer.encode(content);
-      tokenCount += encoded.text.length;
+      // const encoded = tokenizer.encode(content);
+      // tokenCount += encoded.text.length;
 
       // Limit context to max 1500 tokens (configurable)
-      if (tokenCount > 1500) {
-        break;
-      }
+      // if (tokenCount > 1500) {
+      //   break;
+      // }
 
       contextText += `${content.trim()}\nSOURCE: ${url}\n---\n`;
     }
   }
 
-  // console.log("contextText: ", contextText);
+  console.log("contextText: ", contextText);
 
   const systemContent = `You are a helpful assistant. When given CONTEXT you answer questions using only that information,
   and you always format your output in markdown. You include code snippets if relevant. If you are unsure and the answer
@@ -121,7 +121,7 @@ const handler = async (req: Request): Promise<Response> => {
 
 \`\`\`jsx
 import { Canvas, Chart, Axis, Interval, Tooltip } from '@antv/f2';
-// F2 对数据源格式的要求，仅仅是 JSON 数组，数组的每个元素是一个标准 JSON 对象。
+
 const data = [
   { genre: 'Sports', sold: 275 },
   { genre: 'Strategy', sold: 115 },
@@ -143,6 +143,7 @@ const { props } = (
   </Canvas>
 );
 
+// 根据具体的运行环境实例化
 const canvas = new Canvas(props);
 canvas.render();
 \`\`\`
