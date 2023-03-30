@@ -66,7 +66,7 @@ const handler = async (req: Request): Promise<Response> => {
     "match_documents",
     {
       query_embedding: embedding,
-      similarity_threshold: 0.001, // Choose an appropriate threshold for your data
+      similarity_threshold: 0.01, // Choose an appropriate threshold for your data
       match_count: 10 // Choose the number of matches
     }
   );
@@ -85,13 +85,13 @@ const handler = async (req: Request): Promise<Response> => {
       const document = documents[i];
       const content = document.content;
       const url = document.url;
-      // const encoded = tokenizer.encode(content);
-      // tokenCount += encoded.text.length;
+      const encoded = tokenizer.encode(content);
+      tokenCount += encoded.text.length;
 
       // Limit context to max 1500 tokens (configurable)
-      // if (tokenCount > 1500) {
-      //   break;
-      // }
+      if (tokenCount > 1500) {
+        break;
+      }
 
       contextText += `${content.trim()}\nSOURCE: ${url}\n---\n`;
     }
